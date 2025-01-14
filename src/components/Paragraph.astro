@@ -1,0 +1,10 @@
+---
+export interface Props extends HTMLAttributes<"p"> {}
+
+const styles = {
+    display: "block",
+    margin: "1em 0"
+};
+---
+
+<p style={Object.assign({}, styles, Astro.props.style)} {...Astro.props}><slot /></p>

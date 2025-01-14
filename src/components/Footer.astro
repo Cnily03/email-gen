@@ -1,0 +1,73 @@
+---
+import { Line, Table } from "./table";
+import Spliter from "./FooterSpliter.astro";
+import Link from "./Link.astro";
+
+type LinkItem = { text: string; href: string };
+type Item = string | LinkItem;
+
+export interface Props extends HTMLAttributes<"table"> {
+    links?: Array<LinkItem>;
+    infos?: Array<Item>;
+}
+
+const { links: _, infos: __, ...rest }: Props = Astro.props;
+
+const links = Astro.props.links || [];
+const infos = Astro.props.infos || [];
+
+const styles = {
+    "box-sizing": "border-box",
+    width: "100%",
+    "text-align": "center",
+    color: "#6a737d",
+    "font-size": "14px"
+};
+
+const paddingStyles = (l: string) => ({ height: l, "box-sizing": "border-box" });
+---
+
+<Table style={Object.assign({}, styles, rest.style)} {...rest}>
+    <Line style={paddingStyles("16px")} />
+    {
+        links.length > 0 && (
+            <>
+                <Line style={paddingStyles("8px")} />
+                <Line>
+                    {links.map((link, index) => (
+                        <>
+                            <Link href={link.href}>{link.text}</Link>
+                            <Spliter show={index < links.length - 1} />
+                        </>
+                    ))}
+                </Line>
+            </>
+        )
+    }
+    {
+        infos.length > 0 && (
+            <>
+                <Line style={paddingStyles("8px")} />
+                <Line>
+                    {infos.map((info, index) => {
+                        if (typeof info === "string") {
+                            return (
+                                <>
+                                    <span>{info}</span>
+                                    <Spliter show={index < infos.length - 1} />
+                                </>
+                            );
+                        } else {
+                            return (
+                                <>
+                                    <Link href={info.href}>{info.text}</Link>
+                                    <Spliter show={index < infos.length - 1} />
+                                </>
+                            );
+                        }
+                    })}
+                </Line>
+            </>
+        )
+    }
+</Table>

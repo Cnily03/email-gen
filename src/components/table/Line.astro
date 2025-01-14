@@ -1,0 +1,5 @@
+---
+export interface Props extends HTMLAttributes<"td"> {}
+---
+
+<tr><td {...Astro.props}><slot /></td></tr>

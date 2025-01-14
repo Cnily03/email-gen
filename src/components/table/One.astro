@@ -1,0 +1,12 @@
+---
+import type { CSSProperty } from "astro/types";
+import type { RecordType } from "astro:schema";
+
+export interface Props extends HTMLAttributes<"table"> {
+    tdStyle?: string | RecordType<CSSProperty, string | number>;
+}
+
+const { tdStyle, ...rest }: Props = Astro.props;
+---
+
+<table {...rest}><tr><td style={tdStyle}><slot /></td></tr></table>

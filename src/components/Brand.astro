@@ -1,0 +1,43 @@
+---
+import { One } from "./table";
+import type { CSSProperty } from "astro/types";
+import { getImage } from "astro:assets";
+import { Image } from "astro:assets";
+import type { RecordType } from "astro:schema";
+
+export interface Props extends HTMLAttributes<"table"> {
+    image_url: string | ImageMetadata;
+    alt: string;
+    brandStyle?: string | RecordType<CSSProperty, string | number>;
+}
+
+const { image_url, alt, brandStyle, ...rest }: Props = Astro.props;
+
+async function toImageMeta(src: string | ImageMetadata): Promise<ImageMetadata> {
+    if (typeof src !== "string") return src;
+    const result = await getImage({ src });
+    return {
+        src: result.src,
+        width: result.options.width ?? result.rawOptions.width!,
+        height: result.options.height ?? result.rawOptions.height!,
+        format: (result.options.format ?? result.rawOptions.format!) as ImageMetadata["format"]
+    };
+}
+
+const img_meta = typeof image_url === "string" ? await toImageMeta(image_url) : image_url;
+---
+
+<One {...rest} tdStyle={{ "line-height": 0 }}>
+    <Image
+        src={img_meta}
+        alt={alt}
+        style={Object.assign(
+            {},
+            {
+                "max-width": "100%",
+                "min-height": "32px"
+            },
+            brandStyle
+        )}
+    />
+</One>

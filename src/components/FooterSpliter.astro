@@ -1,0 +1,9 @@
+---
+export interface Props extends HTMLAttributes<"span"> {
+    show: boolean;
+}
+
+const { show, ...rest }: Props = Astro.props;
+---
+
+{show && <span {...rest}> ・ </span>}

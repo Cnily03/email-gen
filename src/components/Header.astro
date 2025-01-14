@@ -1,0 +1,47 @@
+---
+import { Table, Line } from "./table";
+import Brand, { type Props as BrandProps } from "./Brand.astro";
+
+export interface Props extends HTMLAttributes<"span"> {
+    title?: string;
+    brand?: BrandProps;
+}
+
+const { title, brand, ...rest }: Props = Astro.props;
+---
+
+<Table
+    style={{
+        "box-sizing": "border-box",
+        width: "100%",
+        "margin-bottom": "24px",
+        padding: "0 16px",
+        "text-align": "center",
+        "font-size": "24px",
+        "font-weight": "600",
+        "line-height": "1.25"
+    }}
+>
+    {
+        brand && (
+            <Line style={{ "padding-bottom": "16px" }}>
+                <Brand
+                    image_url={brand.image_url}
+                    alt={brand.alt}
+                    style={{
+                        "box-sizing": "border-box",
+                        width: "100%",
+                        padding: "0 16px",
+                        "text-align": "center"
+                    }}
+                    brandStyle={{
+                        "max-height": "64px"
+                    }}
+                />
+            </Line>
+        )
+    }
+    <Line>
+        <span {...rest}>{title ? title : <slot />}</span>
+    </Line>
+</Table>

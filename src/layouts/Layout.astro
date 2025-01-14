@@ -1,22 +1,44 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+export interface Props extends HTMLAttributes<"table"> {
+    title?: string;
+    lang?: string;
+}
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+const { title, lang, ...rest }: Props = Astro.props;
+
+const tableStyles = {
+    "box-sizing": "border-box",
+    "border-spacing": 0,
+    "border-collapse": "collapse",
+    "margin-top": "16px",
+    "margin-bottom": "16px",
+    "margin-right": "auto",
+    "margin-left": "auto",
+    width: "100% !important"
+};
+
+const tdStyles = {
+    "padding-left": "16px",
+    "padding-right": "16px"
+};
+---
+
+<!doctype html>
+<html lang={lang || "en"}>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        {title && <title>{title}</title>}
+    </head>
+    <body
+        style={{
+            margin: 0,
+            width: "100%",
+            height: "100%"
+        }}
+    >
+        <table style={Object.assign({}, tableStyles, rest.style)} {...rest}>
+            <tr><td style={tdStyles}><slot /></td></tr>
+        </table>
+    </body>
+</html>

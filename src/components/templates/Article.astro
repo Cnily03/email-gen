@@ -1,0 +1,17 @@
+---
+import { type Props as BrandProps } from "@/components/Brand.astro";
+import Header from "@/components/Header.astro";
+import Body from "@/components/Body.astro";
+
+export interface Props {
+    brand?: BrandProps;
+}
+---
+
+<Header brand={Astro.props.brand}>
+    <slot name="title" />
+</Header>
+
+<Body>
+    <slot />
+</Body>

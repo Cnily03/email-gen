@@ -1,4 +1,19 @@
 {
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "lib": ["DOM", "ESNext"],
+    "allowSyntheticDefaultImports": true,
+    "plugins": [{
+      "name": "@astrojs/ts-plugin"
+    }],
+    "baseUrl": ".",
+    "types": ["./global.d.ts"],
+    "paths": {
+      "@/*": ["src/*"],
+      "$/*": ["./*"]
+    }
+  },
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist"]

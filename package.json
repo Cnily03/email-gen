@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "email-gen",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -9,6 +9,10 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.1.6"
+    "astro": "^5.1.6",
+    "sass": "^1.83.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.6"
   }
 }
