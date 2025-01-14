@@ -22,7 +22,7 @@ const mime = {
 let transformedAddStaticImage = false
 
 const service: LocalImageService = Object.assign({}, sharpService, <LocalImageService>{
-    async transform(buffer, options, imageConfig) {
+    async transform(buffer, options, _) {
         return {
             data: buffer,
             format: options.format ?? 'jpeg',
