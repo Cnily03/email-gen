@@ -1,0 +1,26 @@
+---
+import Template, { type Props } from "@/components/templates/Article.astro";
+import P from "@/components/Paragraph.astro";
+import Link from "@/components/Link.astro";
+import Button from "@/components/Button.astro";
+
+const buttonStyles = {
+    "font-weight": "600",
+    width: "100%"
+};
+---
+
+<Template {...Astro.props}>
+    <span slot="title">验证你的账户</span>
+    <P>尊敬的 <strong>%USER%</strong> 用户：</P>
+    <P>您好！您的近期活动要求我们验证您的账户。如果这是您的操作，请点击下面的按钮或链接完成验证。</P>
+    <P>若您对此并不知情，请忽略这封邮件。</P>
+    <P style={{ "text-align": "center" }}>
+        <Button href="%LINK%" style={buttonStyles}>点此验证账户</Button>
+    </P>
+    <P>如果上面的按钮点击后无法跳转，请手动复制下面的链接到浏览器打开:</P>
+    <P>
+        <Link href="%LINK%" target="_blank" style={{ cursor: "text", "font-size": "14px" }}>%LINK%</Link>
+    </P>
+    <P>此为系统邮件，请勿回复。</P>
+</Template>
