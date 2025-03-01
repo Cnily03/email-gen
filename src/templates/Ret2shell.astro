@@ -33,6 +33,9 @@ const fontFamily =
         "max-width": "648px"
     }}
 >
-    <Article brand={conf.brand}><slot /></Article>
+    <Article brand={conf.brand}>
+        <span slot="title">{conf.head.title}</span>
+        <slot />
+    </Article>
     <Footer links={conf.footer.links} infos={conf.footer.infos} />
 </EmailLayout>
