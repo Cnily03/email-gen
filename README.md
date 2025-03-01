@@ -36,6 +36,16 @@ pnpm dev
 
 Define your email **templates** (AKA **layouts**) in [src/templates/](src/templates/).
 
+> [!NOTE]
+>
+> Please use style inline for email HTML, as most email readers don't support external CSS. For example:
+>
+> ```jsx
+> <div style={{ color: 'red', fontSize: '16px' }}>Hello, world!</div>
+> ```
+>
+> You can use `Object.assign` to merge styles in props passed in.
+
 Then define your email documents using the templates in [docs/](docs/). You didn't need to pass the props by `<Template someProp={someValue}>...</Template>`. Use `defineProps` instead.
 
 ```jsx
