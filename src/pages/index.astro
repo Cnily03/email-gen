@@ -9,7 +9,7 @@ const slugs = Object.keys(articles)
     .map(path => path.replace(/^\/docs\/(.+?)\.astro$/, "$1"));
 ---
 
-<Layout title="Emails">
+<Layout title="Emails" baseUrl="./">
     <div>
         <h1>Emails</h1>
         <ul>
@@ -22,7 +22,7 @@ const slugs = Object.keys(articles)
                             data-tooltip-clicked="Copied Title!"
                             data-tooltip-duration="1000"
                             data-copy="title"
-                            data-fetch-url={`/${slug}`}
+                            data-fetch-url={`./${slug}`}
                         >
                             <Icon class="icon" name="fluent:clipboard-note-20-regular" />
                         </button>
@@ -32,16 +32,16 @@ const slugs = Object.keys(articles)
                             data-tooltip-clicked="Copied HTML!"
                             data-tooltip-duration="1000"
                             data-copy="html"
-                            data-fetch-url={`/${slug}`}
+                            data-fetch-url={`./${slug}`}
                         >
                             <Icon class="icon" name="fluent:clipboard-code-20-regular" />
                         </button>
                         <a
-                            href={`/${slug}`}
+                            href={`./${slug}`}
                             class="tooltip tooltip-top"
                             data-tooltip="..."
                             data-lazy="hover:tooltip:title"
-                            data-lazy-props={`{ "url": "/${slug}" }`}
+                            data-lazy-props={`{ "url": "./${slug}" }`}
                         >
                             {slug}
                         </a>
