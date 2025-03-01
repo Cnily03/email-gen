@@ -1,0 +1,32 @@
+---
+import EmailLayout from "@/layouts/EmailLayout.astro";
+// import Header from "@/components/Header.astro";
+
+interface ModuleExport {
+    default: any;
+    defineProps: () => any;
+}
+
+interface Props {
+    Component: any;
+    props: any;
+}
+
+export async function getStaticPaths() {
+    const articles: Record<string, ModuleExport> = import.meta.glob("@docs/**/*.astro", { eager: true });
+    return Object.entries(articles)
+        .filter(([path]) => !path.includes("/_"))
+        .map(([path, module]) => {
+            const { default: Component, defineProps } = module as ModuleExport;
+            const slug = path.replace(/^\/docs\/(.+?)\.astro$/, "$1");
+            return {
+                params: { slug },
+                props: { Component, props: defineProps() }
+            };
+        });
+}
+
+const { Component, props } = Astro.props as Props;
+---
+
+<Component {...props} />

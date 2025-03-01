@@ -5,6 +5,8 @@ const styles = {
     display: "block",
     margin: "1em 0"
 };
+
+const { style, ...rest }: Props = Astro.props;
 ---
 
-<p style={Object.assign({}, styles, Astro.props.style)} {...Astro.props}><slot /></p>
+<p style={Object.assign({}, styles, style)} {...rest}><slot /></p>

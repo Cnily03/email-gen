@@ -11,8 +11,10 @@ const styles = {
     padding: "4px 24px",
     "font-size": "15px"
 };
+
+const { style, ...rest }: Props = Astro.props;
 ---
 
-<One style={Object.assign({}, styles, Astro.props.style)} {...Astro.props}>
+<One style={Object.assign({}, styles, style)} {...rest}>
     <slot />
 </One>

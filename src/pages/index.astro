@@ -1,0 +1,199 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { Icon } from "astro-icon/components";
+
+const articles = import.meta.glob("@docs/**/*.astro", { eager: true });
+
+const slugs = Object.keys(articles)
+    .filter(path => !path.includes("/_"))
+    .map(path => path.replace(/^\/docs\/(.+?)\.astro$/, "$1"));
+---
+
+<Layout title="Emails">
+    <div>
+        <h1>Emails</h1>
+        <ul>
+            {
+                slugs.map(slug => (
+                    <li>
+                        <button
+                            class="tooltip"
+                            data-tooltip="Copy Title"
+                            data-tooltip-clicked="Copied Title!"
+                            data-tooltip-duration="1000"
+                            data-copy="title"
+                            data-fetch-url={`/${slug}`}
+                        >
+                            <Icon class="icon" name="fluent:clipboard-note-20-regular" />
+                        </button>
+                        <button
+                            class="tooltip"
+                            data-tooltip="Copy HTML"
+                            data-tooltip-clicked="Copied HTML!"
+                            data-tooltip-duration="1000"
+                            data-copy="html"
+                            data-fetch-url={`/${slug}`}
+                        >
+                            <Icon class="icon" name="fluent:clipboard-code-20-regular" />
+                        </button>
+                        <a
+                            href={`/${slug}`}
+                            class="tooltip tooltip-top"
+                            data-tooltip="..."
+                            data-lazy="hover:tooltip:title"
+                            data-lazy-props={`{ "url": "/${slug}" }`}
+                        >
+                            {slug}
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+</Layout>
+
+<script>
+    const titleStorage = new Map<string, string>();
+    function getHtmlTitle(html: string): string {
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        return doc.title;
+    }
+    document.querySelectorAll("[data-copy]").forEach(el => {
+        el.addEventListener("click", async e => {
+            const emitTooltipEvent = () => el.dispatchEvent(new CustomEvent("click:tooltip", e));
+            const url = el.getAttribute("data-fetch-url");
+            if (!url) return;
+            const copy = el.getAttribute("data-copy");
+            const res = await fetch(url);
+            const text = await res.text();
+            if (copy === "title") {
+                const title = getHtmlTitle(text);
+                navigator.clipboard.writeText(title);
+                titleStorage.set(url, title);
+                emitTooltipEvent();
+                return;
+            } else if (copy === "html") {
+                navigator.clipboard.writeText(text);
+                emitTooltipEvent();
+                return;
+            }
+        });
+    });
+    const tooltipTimeoutPool = new Map<Element, NodeJS.Timeout>();
+    document.querySelectorAll("[data-tooltip-clicked]").forEach(el => {
+        const originalText = el.getAttribute("data-tooltip");
+        el.addEventListener("click:tooltip", () => {
+            const clickedText = el.getAttribute("data-tooltip-clicked");
+            if (typeof originalText !== "string" || typeof clickedText !== "string") return;
+            let duration = parseInt(el.getAttribute("data-tooltip-duration") ?? "1000");
+            if (Number.isNaN(duration)) duration = 1000;
+            el.setAttribute("data-tooltip", clickedText);
+            clearTimeout(tooltipTimeoutPool.get(el));
+            const timeout = setTimeout(() => {
+                el.setAttribute("data-tooltip", originalText);
+            }, duration);
+            tooltipTimeoutPool.set(el, timeout);
+        });
+    });
+    document.querySelectorAll("[data-lazy='hover:tooltip:title']").forEach(el => {
+        el.addEventListener("mouseover", async () => {
+            const props = JSON.parse(el.getAttribute("data-lazy-props") ?? "{}");
+            const url: string = props.url;
+            if (!url) return;
+            if (!titleStorage.has(url)) {
+                const res = await fetch(url);
+                const text = await res.text();
+                const title = getHtmlTitle(text);
+                titleStorage.set(url, title);
+            }
+            const title = titleStorage.get(url);
+            if (!title) return;
+            el.setAttribute("data-tooltip", title);
+        });
+    });
+</script>
+
+<style lang="scss">
+    div {
+        display: grid;
+        place-items: center;
+        margin-top: 5rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+
+    button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin-right: 0.5rem;
+        display: flex;
+    }
+
+    button:not(button + button) {
+        margin-right: 0.25rem;
+    }
+
+    .icon {
+        color: #0070f3;
+        height: 1.25rem;
+        width: 1.25rem;
+    }
+
+    a {
+        color: #0070f3;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .tooltip::before {
+        content: attr(data-tooltip);
+        position: absolute;
+        background: #000;
+        color: #fff;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        opacity: 0;
+        transition: opacity 0.2s;
+        pointer-events: none;
+    }
+
+    .tooltip:hover::before {
+        opacity: 1;
+    }
+
+    .tooltip-left::before {
+        transform: translateX(-100%);
+    }
+
+    .tooltip-right::before {
+        transform: translateX(100%);
+    }
+
+    .tooltip-top::before {
+        transform: translateY(-100%);
+    }
+
+    .tooltip-bottom::before {
+        transform: translateY(100%);
+    }
+</style>

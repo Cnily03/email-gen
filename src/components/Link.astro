@@ -5,6 +5,8 @@ const styles = {
     color: "#0991ed",
     "text-decoration": "none"
 };
+
+const { style, ...rest }: Props = Astro.props;
 ---
 
-<a style={Object.assign({}, styles, Astro.props.style)} {...Astro.props} target="_blank"><slot /></a>
+<a style={Object.assign({}, styles, style)} {...rest} target="_blank"><slot /></a>

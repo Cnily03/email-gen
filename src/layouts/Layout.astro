@@ -1,44 +1,26 @@
 ---
-export interface Props extends HTMLAttributes<"table"> {
+export interface Props extends HTMLAttributes<"body"> {
     title?: string;
     lang?: string;
 }
 
 const { title, lang, ...rest }: Props = Astro.props;
-
-const tableStyles = {
-    "box-sizing": "border-box",
-    "border-spacing": 0,
-    "border-collapse": "collapse",
-    "margin-top": "16px",
-    "margin-bottom": "16px",
-    "margin-right": "auto",
-    "margin-left": "auto",
-    width: "100% !important"
-};
-
-const tdStyles = {
-    "padding-left": "16px",
-    "padding-right": "16px"
-};
 ---
 
 <!doctype html>
 <html lang={lang || "en"}>
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <meta name="apple-mobile-web-app-title" content="EmailGen" />
+        <link rel="manifest" href="/site.webmanifest" />
         {title && <title>{title}</title>}
     </head>
-    <body
-        style={{
-            margin: 0,
-            width: "100%",
-            height: "100%"
-        }}
-    >
-        <table style={Object.assign({}, tableStyles, rest.style)} {...rest}>
-            <tr><td style={tdStyles}><slot /></td></tr>
-        </table>
+    <body {...rest}>
+        <slot />
     </body>
 </html>

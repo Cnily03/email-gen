@@ -10,6 +10,8 @@ const styles = {
     "border-radius": ".375rem",
     padding: ".5rem 1rem"
 };
+
+const { style, ...rest }: Props = Astro.props;
 ---
 
-<a style={Object.assign({}, styles, Astro.props.style)} {...Astro.props} target="_blank"><slot /></a>
+<a style={Object.assign({}, styles, style)} {...rest} target="_blank"><slot /></a>

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "strict": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "lib": ["DOM", "ESNext"],
@@ -11,10 +12,10 @@
     "types": ["./global.d.ts"],
     "paths": {
       "@/*": ["src/*"],
-      "$/*": ["./*"]
+      "@docs/*": ["./docs/*"],
     }
   },
-  "extends": "astro/tsconfigs/strict",
+  "extends": "astro/tsconfigs/base",
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist"]
 }

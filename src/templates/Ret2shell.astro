@@ -1,0 +1,38 @@
+---
+import EmailLayout from "@/layouts/EmailLayout.astro";
+import Article from "@/components/Article.astro";
+import Footer from "@/components/Footer.astro";
+
+export interface CommonConfig {
+    html_title: string;
+    html_lang: string;
+    brand: {
+        image_url: string | ImageMetadata;
+        alt: string;
+    };
+    head: {
+        title: string;
+    };
+    footer: {
+        links: { text: string; href: string }[];
+        infos: string[];
+    };
+}
+
+const conf = Astro.props as CommonConfig;
+
+const fontFamily =
+    "JetBrains Mono,Menlo,-apple-system,Noto Sans,Helvetica Neue,Helvetica,Nimbus Sans L,Arial,Liberation Sans,PingFang SC,Hiragino Sans GB,Noto Sans CJK SC,Source Han Sans SC,Source Han Sans CN,Microsoft YaHei,Consolas,Courier,monospace";
+---
+
+<EmailLayout
+    title={conf.html_title}
+    lang={conf.html_lang}
+    style={{
+        "font-family": fontFamily,
+        "max-width": "648px"
+    }}
+>
+    <Article brand={conf.brand}><slot /></Article>
+    <Footer links={conf.footer.links} infos={conf.footer.infos} />
+</EmailLayout>

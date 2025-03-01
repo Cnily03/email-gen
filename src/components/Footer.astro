@@ -11,7 +11,7 @@ export interface Props extends HTMLAttributes<"table"> {
     infos?: Array<Item>;
 }
 
-const { links: _, infos: __, ...rest }: Props = Astro.props;
+const { links: _, infos: __, style, ...rest }: Props = Astro.props;
 
 const links = Astro.props.links || [];
 const infos = Astro.props.infos || [];
@@ -27,7 +27,7 @@ const styles = {
 const paddingStyles = (l: string) => ({ height: l, "box-sizing": "border-box" });
 ---
 
-<Table style={Object.assign({}, styles, rest.style)} {...rest}>
+<Table style={Object.assign({}, styles, style)} {...rest}>
     <Line style={paddingStyles("16px")} />
     {
         links.length > 0 && (
